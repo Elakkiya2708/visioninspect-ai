@@ -80,13 +80,23 @@ export default function Inspect() {
     try {
       const res = await api.post<DefectPrediction>(`/api/inspection/analyze/${selectedImage.id}`);
       setResult(res.data);
-      drawResult(res.data);
+      // Drawing happens in the effect below, once the <canvas> for the
+      // result section has actually mounted — calling it here would run
+      // before React re-renders with `result` set, so canvasRef.current
+      // would still be null.
     } catch (err: any) {
       setAnalyzeError(err?.response?.data?.detail || "Analysis failed.");
     } finally {
       setAnalyzing(false);
     }
   }
+
+  useEffect(() => {
+    if (result) {
+      drawResult(result);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result]);
 
   function drawResult(prediction: DefectPrediction) {
     const reference = references.find((r) => r.id === prediction.reference_image_id);
