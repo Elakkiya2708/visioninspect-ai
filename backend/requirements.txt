@@ -1,0 +1,22 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+sqlalchemy==2.0.35
+pydantic==2.9.2
+email-validator==2.2.0
+pydantic-settings==2.5.2
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-multipart==0.0.9
+Pillow==10.4.0
+python-dotenv==1.0.1
+alembic==1.13.2
+
+# Milestone 2 — Image Processing & Defect Detection
+# Version ranges (not exact pins) here on purpose: numpy/opencv/scikit-image
+# ship Python-version-specific prebuilt wheels, and an exact pin can miss
+# the wheel for newer Python releases (e.g. 3.13), forcing pip to build
+# from source — which needs a C compiler most machines don't have.
+numpy>=1.26.4
+opencv-python-headless>=4.9.0.80
+scikit-image>=0.24.0

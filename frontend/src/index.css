@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------
+   Design tokens. Professional navy/blue palette — a fixed dark-navy
+   sidebar (brand rail, constant in both themes) with a clean blue
+   accent, green for positive/validated states, and light content
+   surfaces that follow the theme toggle. Every component consumes the
+   semantic Tailwind classes (bg-surface, text-fg, etc.), never a raw
+   hex, so the whole app repaints from these two token blocks.
+   ------------------------------------------------------------------- */
+@layer base {
+  :root {
+    --c-bg: 245 247 250;
+    --c-surface: 255 255 255;
+    --c-surface-2: 237 241 247;
+    --c-border: 224 229 237;
+    --c-border-strong: 199 207 219;
+    --c-fg: 17 24 39;
+    --c-fg-muted: 91 100 114;
+    --c-fg-subtle: 138 146 158;
+    --c-accent: 37 99 235;
+    --c-accent-fg: 255 255 255;
+    --c-accent-muted: 37 99 235;
+    --c-success: 22 163 94;
+    --c-critical: 200 48 42;
+    --c-warning: 180 121 10;
+    --c-info: 37 99 235;
+
+    --c-sidebar-bg: 11 26 45;
+    --c-sidebar-bg-active: 20 40 64;
+    --c-sidebar-border: 22 40 61;
+    --c-sidebar-fg: 158 176 199;
+    --c-sidebar-fg-active: 255 255 255;
+  }
+
+  .dark {
+    --c-bg: 13 17 23;
+    --c-surface: 20 25 32;
+    --c-surface-2: 27 33 42;
+    --c-border: 38 46 57;
+    --c-border-strong: 54 64 78;
+    --c-fg: 233 237 243;
+    --c-fg-muted: 152 162 176;
+    --c-fg-subtle: 103 113 128;
+    --c-accent: 74 139 255;
+    --c-accent-fg: 8 15 26;
+    --c-accent-muted: 74 139 255;
+    --c-success: 52 199 122;
+    --c-critical: 234 90 90;
+    --c-warning: 224 158 74;
+    --c-info: 74 139 255;
+
+    --c-sidebar-bg: 8 18 31;
+    --c-sidebar-bg-active: 16 32 51;
+    --c-sidebar-border: 18 32 50;
+    --c-sidebar-fg: 141 158 181;
+    --c-sidebar-fg-active: 255 255 255;
+  }
+
+  html {
+    @apply font-body;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-bg text-fg transition-colors duration-200;
+  }
+  ::selection {
+    background-color: rgb(var(--c-accent) / 0.22);
+  }
+}
+
+@layer components {
+  .bracket-frame {
+    position: relative;
+  }
+  .bracket-frame::before,
+  .bracket-frame::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: rgb(var(--c-accent) / 0.45);
+    transition: border-color 150ms ease;
+    pointer-events: none;
+  }
+  .bracket-frame::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1.5px solid;
+    border-left: 1.5px solid;
+  }
+  .bracket-frame::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1.5px solid;
+    border-right: 1.5px solid;
+  }
+  .bracket-frame:hover::before,
+  .bracket-frame:hover::after {
+    border-color: rgb(var(--c-accent) / 0.9);
+  }
+
+  .input-field {
+    @apply w-full bg-surface border border-border rounded-md px-3.5 py-2.5 text-sm text-fg
+      placeholder:text-fg-subtle focus:outline-none focus:ring-2 focus:ring-accent/35 focus:border-accent/70
+      transition-colors;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent text-accent-fg font-semibold
+      text-sm px-4 py-2.5 hover:opacity-90 active:opacity-80 transition-opacity
+      disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-border-strong text-fg
+      font-medium text-sm px-4 py-2.5 bg-surface hover:border-accent/60 hover:text-accent transition-colors
+      disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-md text-fg-muted
+      font-medium text-sm px-3 py-2 hover:bg-surface-2 hover:text-fg transition-colors;
+  }
+
+  .label-eyebrow {
+    @apply text-[11px] font-mono uppercase tracking-[0.14em] text-fg-subtle;
+  }
+
+  .card {
+    @apply bg-surface border border-border rounded-lg shadow-card;
+  }
+}
