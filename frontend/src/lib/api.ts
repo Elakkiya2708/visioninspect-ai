@@ -123,3 +123,13 @@ export interface UserStats {
   failed_inspections: number;
   pass_rate_pct: number | null;
 }
+
+// ---------- User Management (Factory Supervisor / Production Manager) ----------
+
+export function canViewUsers(role: UserRole): boolean {
+  return role === "factory_supervisor" || role === "production_manager" || role === "admin";
+}
+
+export function canEditRoles(role: UserRole): boolean {
+  return role === "production_manager" || role === "admin";
+}

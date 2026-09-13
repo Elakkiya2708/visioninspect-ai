@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { canViewUsers } from "../lib/api";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 
@@ -10,6 +11,8 @@ const NAV_ITEMS = [
   { to: "/detect", label: "Object Detection", icon: "scan" },
   { to: "/profile", label: "Profile", icon: "user" },
 ];
+
+const USER_MANAGEMENT_ITEM = { to: "/users", label: "User Management", icon: "users" };
 
 function Icon({ name }: { name: string }) {
   if (name === "grid") {
@@ -43,6 +46,16 @@ function Icon({ name }: { name: string }) {
       </svg>
     );
   }
+  if (name === "users") {
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="5.5" cy="5" r="2" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M1.8 13c.7-2.2 2-3.4 3.7-3.4s3 1.2 3.7 3.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+        <circle cx="11" cy="5.3" r="1.6" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M10.3 9.8c1.6.1 2.7 1.3 3.2 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+    );
+  }
   if (name === "scan") {
     return (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -64,6 +77,7 @@ function Icon({ name }: { name: string }) {
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
+  const navItems = user && canViewUsers(user.role) ? [...NAV_ITEMS, USER_MANAGEMENT_ITEM] : NAV_ITEMS;
 
   return (
     <aside className="w-64 shrink-0 h-screen sticky top-0 border-r border-sidebar-border bg-sidebar flex flex-col">
@@ -77,7 +91,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

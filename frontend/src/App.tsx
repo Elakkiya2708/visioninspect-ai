@@ -9,6 +9,7 @@ import Upload from "./pages/Upload";
 import Inspect from "./pages/Inspect";
 import Detect from "./pages/Detect";
 import Profile from "./pages/Profile";
+import UserManagement from "./pages/UserManagement";
 
 export default function App() {
   return (
@@ -55,6 +56,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute>
+                  <UserManagement />
                 </ProtectedRoute>
               }
             />
