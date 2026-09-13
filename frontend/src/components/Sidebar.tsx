@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: "/upload", label: "Image Acquisition", icon: "upload" },
   { to: "/inspect", label: "Defect Inspection", icon: "shield" },
   { to: "/detect", label: "Object Detection", icon: "scan" },
+  { to: "/profile", label: "Profile", icon: "user" },
 ];
 
 function Icon({ name }: { name: string }) {
@@ -31,6 +32,14 @@ function Icon({ name }: { name: string }) {
           strokeLinejoin="round"
         />
         <path d="M5.7 8.1l1.6 1.6 3-3.2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+  if (name === "user") {
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="5.2" r="2.4" stroke="currentColor" strokeWidth="1.3" />
+        <path d="M2.8 13.2c.9-2.6 2.9-4 5.2-4s4.3 1.4 5.2 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
       </svg>
     );
   }
@@ -88,12 +97,12 @@ export default function Sidebar() {
 
       <div className="px-3 py-4 border-t border-sidebar-border">
         <div className="flex items-center justify-between px-3 py-2.5 mb-1">
-          <div className="min-w-0">
+          <Link to="/profile" className="min-w-0 hover:opacity-90 transition-opacity">
             <p className="text-sm font-medium truncate text-sidebar-fg-active">{user?.full_name}</p>
             <p className="text-[11px] font-mono uppercase tracking-[0.14em] text-sidebar-fg/70 mt-0.5">
               {user?.role.replace("_", " ")}
             </p>
-          </div>
+          </Link>
           <ThemeToggle onDark />
         </div>
         <button

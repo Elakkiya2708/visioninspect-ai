@@ -111,3 +111,15 @@ export interface DefectPrediction {
   quality_flags: string[];
   created_at: string;
 }
+
+// ---------- Personal account stats (Profile page) ----------
+
+export interface UserStats {
+  total_images: number;
+  validated_images: number;
+  rejected_images: number;
+  total_inspections: number;
+  passed_inspections: number;
+  failed_inspections: number;
+  pass_rate_pct: number | null;
+}

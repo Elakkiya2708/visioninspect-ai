@@ -67,6 +67,13 @@ Defect Inspection page will show "⚠ no reference set" for it.
 
 ## End-to-end test checklist (do this in order)
 
+0. **Profile page (personalized per-account stats):** each account's
+   "Profile" page (bottom of sidebar, or the nav item) shows activity
+   scoped to *that account only* — images it uploaded, inspections it
+   ran, its own pass rate. Two different accounts will show different
+   numbers here even though the shared Dashboard (system-wide totals)
+   looks the same for everyone by design.
+
 1. Register an account, log in.
 2. **Image Acquisition** → upload an image, filling in **Product line**
    (e.g. `bottle`). Confirm it shows "Validated".

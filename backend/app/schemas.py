@@ -67,6 +67,18 @@ class ProductImageOut(BaseModel):
         from_attributes = True
 
 
+class UserStatsOut(BaseModel):
+    """Per-account activity — scoped to what THIS user uploaded/inspected,
+    not the whole system. Powers the personalized Profile page."""
+    total_images: int
+    validated_images: int
+    rejected_images: int
+    total_inspections: int
+    passed_inspections: int
+    failed_inspections: int
+    pass_rate_pct: float | None
+
+
 class ImageStatsOut(BaseModel):
     total_images: int
     uploaded: int

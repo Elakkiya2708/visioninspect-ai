@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Inspect from "./pages/Inspect";
 import Detect from "./pages/Detect";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -46,6 +47,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <Detect />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

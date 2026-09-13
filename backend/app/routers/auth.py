@@ -2,13 +2,14 @@
 Authentication & user-management endpoints (Milestone 1 — User Management Module).
 """
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.core.security import create_access_token, hash_password, verify_password
 from app.db.database import get_db
-from app.db.models import User, UserRole
+from app.db.models import DefectPrediction, ImageStatus, InspectionVerdict, ProductImage, User, UserRole
 from app.dependencies import get_current_user, require_role
-from app.schemas import LoginRequest, Token, UserCreate, UserOut, UserRoleUpdate
+from app.schemas import LoginRequest, Token, UserCreate, UserOut, UserRoleUpdate, UserStatsOut
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -47,6 +48,70 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserOut)
 def read_current_user(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.get("/me/stats", response_model=UserStatsOut)
+def my_stats(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """
+    Activity scoped to the logged-in account only — this is what makes
+    each user's Profile page show genuinely different numbers instead of
+    the shared, system-wide Dashboard totals.
+    """
+    total_images = (
+        db.query(func.count(ProductImage.id))
+        .filter(ProductImage.uploaded_by_id == current_user.id)
+        .scalar()
+        or 0
+    )
+    validated_images = (
+        db.query(func.count(ProductImage.id))
+        .filter(ProductImage.uploaded_by_id == current_user.id, ProductImage.status == ImageStatus.VALIDATED)
+        .scalar()
+        or 0
+    )
+    rejected_images = (
+        db.query(func.count(ProductImage.id))
+        .filter(ProductImage.uploaded_by_id == current_user.id, ProductImage.status == ImageStatus.REJECTED)
+        .scalar()
+        or 0
+    )
+
+    total_inspections = (
+        db.query(func.count(DefectPrediction.id))
+        .filter(DefectPrediction.analyzed_by_id == current_user.id)
+        .scalar()
+        or 0
+    )
+    passed_inspections = (
+        db.query(func.count(DefectPrediction.id))
+        .filter(
+            DefectPrediction.analyzed_by_id == current_user.id,
+            DefectPrediction.verdict == InspectionVerdict.PASS,
+        )
+        .scalar()
+        or 0
+    )
+    failed_inspections = (
+        db.query(func.count(DefectPrediction.id))
+        .filter(
+            DefectPrediction.analyzed_by_id == current_user.id,
+            DefectPrediction.verdict == InspectionVerdict.FAIL,
+        )
+        .scalar()
+        or 0
+    )
+
+    pass_rate = round((passed_inspections / total_inspections) * 100, 2) if total_inspections > 0 else None
+
+    return UserStatsOut(
+        total_images=total_images,
+        validated_images=validated_images,
+        rejected_images=rejected_images,
+        total_inspections=total_inspections,
+        passed_inspections=passed_inspections,
+        failed_inspections=failed_inspections,
+        pass_rate_pct=pass_rate,
+    )
 
 
 @router.get("/users", response_model=list[UserOut])
