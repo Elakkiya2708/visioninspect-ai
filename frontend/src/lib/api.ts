@@ -133,3 +133,14 @@ export function canViewUsers(role: UserRole): boolean {
 export function canEditRoles(role: UserRole): boolean {
   return role === "production_manager" || role === "admin";
 }
+
+// ---------- System-wide inspection stats (Supervisor / Manager dashboards) ----------
+
+export interface InspectionStats {
+  total_inspections: number;
+  passed: number;
+  failed: number;
+  inconclusive: number;
+  pass_rate_pct: number | null;
+  avg_similarity_pct: number | null;
+}

@@ -120,6 +120,17 @@ class QualityReportOut(BaseModel):
     is_overexposed: bool
 
 
+class InspectionStatsOut(BaseModel):
+    """System-wide (not per-user) inspection health — powers the
+    Factory Supervisor / Production Manager dashboards."""
+    total_inspections: int
+    passed: int
+    failed: int
+    inconclusive: int
+    pass_rate_pct: float | None
+    avg_similarity_pct: float | None
+
+
 class DefectPredictionOut(BaseModel):
     id: str
     product_image_id: str

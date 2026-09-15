@@ -26,6 +26,7 @@ from app.dependencies import get_current_user
 from app.schemas import (
     DefectPredictionOut,
     DefectRegionOut,
+    InspectionStatsOut,
     QualityReportOut,
     ReferenceImageOut,
 )
@@ -225,6 +226,35 @@ def analyze_image(
     db.refresh(record)
 
     return _to_prediction_out(record)
+
+
+@router.get("/stats", response_model=InspectionStatsOut)
+def inspection_stats(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """
+    System-wide inspection health (every account's predictions, not just
+    the caller's) — the Supervisor/Manager dashboards use this; the
+    Quality Engineer dashboard uses the per-account /api/auth/me/stats
+    instead, so the three roles genuinely see different numbers.
+    """
+    rows = db.query(DefectPrediction.verdict, DefectPrediction.similarity_score).all()
+
+    total = len(rows)
+    passed = sum(1 for v, _ in rows if v == InspectionVerdict.PASS)
+    failed = sum(1 for v, _ in rows if v == InspectionVerdict.FAIL)
+    inconclusive = sum(1 for v, _ in rows if v == InspectionVerdict.INCONCLUSIVE)
+
+    decided = passed + failed
+    pass_rate = round((passed / decided) * 100, 2) if decided > 0 else None
+    avg_similarity = round((sum(s for _, s in rows) / total) * 100, 2) if total > 0 else None
+
+    return InspectionStatsOut(
+        total_inspections=total,
+        passed=passed,
+        failed=failed,
+        inconclusive=inconclusive,
+        pass_rate_pct=pass_rate,
+        avg_similarity_pct=avg_similarity,
+    )
 
 
 @router.get("/predictions", response_model=list[DefectPredictionOut])

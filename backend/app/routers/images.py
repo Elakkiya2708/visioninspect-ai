@@ -140,12 +140,15 @@ def list_images(
     status_filter: ImageStatus | None = None,
     limit: int = 50,
     offset: int = 0,
+    mine: bool = False,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     query = db.query(ProductImage)
     if status_filter:
         query = query.filter(ProductImage.status == status_filter)
+    if mine:
+        query = query.filter(ProductImage.uploaded_by_id == current_user.id)
     return (
         query.order_by(ProductImage.created_at.desc())
         .offset(offset)

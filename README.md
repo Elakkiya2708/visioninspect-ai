@@ -187,12 +187,15 @@ python -m app.scripts.load_mvtec_dataset /path/to/mvtec_ad --user-email you@plan
 
 ## Roles
 
-| Role | Can do |
-|---|---|
-| Quality Engineer | Upload/view images, run inspections, view dashboard |
-| Factory Supervisor | Above + view all user accounts |
-| Production Manager | Above + reassign user roles |
-| Admin | Full access |
+Each role sees a genuinely different Dashboard — not just a different
+label on the same data:
+
+| Role | Dashboard shows | Can do |
+|---|---|---|
+| Quality Engineer | Personal stats (their own uploads/inspections/pass rate) + their recent uploads | Upload/view images, run inspections, view dashboard |
+| Factory Supervisor | Factory Overview — system-wide image/inspection stats, recent team inspections | Above + view all user accounts (read-only) |
+| Production Manager | Manager Console — same factory overview + team composition | Above + reassign user roles |
+| Admin | Manager Console | Full access |
 
 ## Tech stack
 
