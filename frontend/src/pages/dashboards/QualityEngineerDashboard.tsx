@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import RoleBanner from "../../components/RoleBanner";
 import IconStat from "../../components/IconStat";
 import ImageCard from "../../components/ImageCard";
+import ProgressBar from "../../components/ProgressBar";
 import { api, ProductImage, UserStats } from "../../lib/api";
 
 /**
@@ -50,7 +51,7 @@ export default function QualityEngineerDashboard() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <IconStat label="Images Uploaded" value={stats?.total_images ?? 0} tone="accent" icon="image" />
             <IconStat label="Validated" value={stats?.validated_images ?? 0} tone="success" icon="check" />
             <IconStat label="Inspections Run" value={stats?.total_inspections ?? 0} tone="info" icon="chart" />
@@ -59,6 +60,18 @@ export default function QualityEngineerDashboard() {
               value={stats?.pass_rate_pct != null ? `${stats.pass_rate_pct}%` : "—"}
               tone="accent"
               icon="trend"
+            />
+          </div>
+
+          <div className="card p-4 mb-8 max-w-md space-y-4">
+            <p className="label-eyebrow">Your Rate Overview</p>
+            <ProgressBar label="Pass Rate" valuePct={stats?.pass_rate_pct ?? null} tone="success" />
+            <ProgressBar
+              label="Validation Rate"
+              valuePct={
+                stats && stats.total_images > 0 ? (stats.validated_images / stats.total_images) * 100 : null
+              }
+              tone="info"
             />
           </div>
 

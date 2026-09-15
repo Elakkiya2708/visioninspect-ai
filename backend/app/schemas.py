@@ -120,6 +120,13 @@ class QualityReportOut(BaseModel):
     is_overexposed: bool
 
 
+class DailyActivityOut(BaseModel):
+    date: str  # YYYY-MM-DD
+    total: int
+    passed: int
+    failed: int
+
+
 class InspectionStatsOut(BaseModel):
     """System-wide (not per-user) inspection health — powers the
     Factory Supervisor / Production Manager dashboards."""

@@ -144,3 +144,10 @@ export interface InspectionStats {
   pass_rate_pct: number | null;
   avg_similarity_pct: number | null;
 }
+
+export interface DailyActivity {
+  date: string;
+  total: number;
+  passed: number;
+  failed: number;
+}

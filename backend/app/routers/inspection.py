@@ -10,6 +10,7 @@ whitespace everywhere a reference is looked up, so "Bottle", "bottle",
 and " bottle " are all treated as the same line.
 """
 import uuid
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
@@ -24,6 +25,7 @@ from app.db.database import get_db
 from app.db.models import DefectPrediction, InspectionVerdict, ProductImage, ReferenceImage, User
 from app.dependencies import get_current_user
 from app.schemas import (
+    DailyActivityOut,
     DefectPredictionOut,
     DefectRegionOut,
     InspectionStatsOut,
@@ -255,6 +257,45 @@ def inspection_stats(db: Session = Depends(get_db), current_user: User = Depends
         pass_rate_pct=pass_rate,
         avg_similarity_pct=avg_similarity,
     )
+
+
+@router.get("/activity", response_model=list[DailyActivityOut])
+def inspection_activity(
+    days: int = 14,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Daily inspection counts (system-wide) for the last N days — powers
+    the activity chart on the Supervisor/Manager dashboards. Computed in
+    Python over the raw rows rather than a DB-specific date-grouping
+    query, so it works identically on SQLite and Postgres.
+    """
+    days = max(1, min(days, 90))
+    rows = db.query(DefectPrediction.created_at, DefectPrediction.verdict).all()
+
+    now = datetime.now(timezone.utc)
+    start_date = (now - timedelta(days=days - 1)).date()
+
+    daily: dict[str, dict[str, int]] = {
+        (start_date + timedelta(days=i)).isoformat(): {"total": 0, "passed": 0, "failed": 0}
+        for i in range(days)
+    }
+
+    for created_at, verdict in rows:
+        ts = created_at if created_at.tzinfo else created_at.replace(tzinfo=timezone.utc)
+        day_key = ts.date().isoformat()
+        if day_key in daily:
+            daily[day_key]["total"] += 1
+            if verdict == InspectionVerdict.PASS:
+                daily[day_key]["passed"] += 1
+            elif verdict == InspectionVerdict.FAIL:
+                daily[day_key]["failed"] += 1
+
+    return [
+        DailyActivityOut(date=d, total=v["total"], passed=v["passed"], failed=v["failed"])
+        for d, v in sorted(daily.items())
+    ]
 
 
 @router.get("/predictions", response_model=list[DefectPredictionOut])
