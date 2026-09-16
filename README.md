@@ -1,8 +1,9 @@
-# VisionInspect AI — Milestone 1 & 2
+# VisionInspect AI — Milestones 1, 2 & 3
 
 **Manufacturing Defect Detection & Quality Inspection System**
 Milestone 1: Project Initialization, Design Process & Core Setup
 Milestone 2: Image Processing & Defect Detection
+Milestone 3: Defect Classification, Quality Control & Manufacturing Analytics
 
 ## Milestone 1 — what's included
 
@@ -65,6 +66,64 @@ line), but the image must still have *some* product line set — an image
 uploaded with that field left blank has nothing to match against, and the
 Defect Inspection page will show "⚠ no reference set" for it.
 
+
+## Milestone 3 — what's included
+
+### Defect Classification (`app/vision/classifier.py`)
+Each detected region is classified into a defect **type** from its
+geometry and pixel statistics (elongation, area fraction, edge density,
+intensity difference vs the reference):
+
+| Type | Detected by | Base severity |
+|---|---|---|
+| Crack | long, thin, high edge density | 95 |
+| Missing Component | large area + large brightness change | 90 |
+| Deformation | large, smooth, low edge density | 75 |
+| Contamination | localised intensity change | 55 |
+| Discoloration | subtle, flat, uniform shift | 45 |
+| Surface Scratch | long and thin, softer edges | 35 |
+
+These are classical CV heuristics, not a trained classifier — they need
+zero labelled training data and are honest about what they are.
+
+### Severity Scoring Framework
+Implemented exactly as specified:
+
+```
+Severity = (Size x 30%) + (Location x 25%) + (Defect Type x 25%) + (Confidence x 20%)
+```
+
+- **Size** — defect area relative to the product surface
+- **Location** — centre of the product treated as the functional area,
+  outer edge as cosmetic (a centred defect scores higher)
+- **Defect Type** — the base severity from the table above
+- **Confidence** — the classifier's confidence in its own call
+
+**Levels:** Critical 80–100 · High 60–79 · Medium 40–59 · Low 0–39
+
+### Quality Control (`app/vision/quality_control.py`)
+Turns the scored defects into one auditable decision. Overall severity is
+driven by the **worst** defect (one critical crack must fail the unit),
+plus a small capped penalty for defect volume.
+
+| Level | Decision | Recommendation |
+|---|---|---|
+| Critical | **reject** | Reject and trigger the quality inspection workflow |
+| High | **rework** | Repair required before dispatch |
+| Medium | **rework** | Hold for manual inspection review |
+| Low / none | **pass** | Acceptable for dispatch |
+
+### Manufacturing Analytics Dashboard
+`GET /api/inspection/analytics` powers a new **Analytics** page:
+defect trend over time, severity distribution donut, defect-type
+frequency, and a per-product-line production quality report
+(inspections / passed / rework / rejected / pass rate / avg severity).
+
+### Schema upgrades are automatic
+`app/db/migrate.py` adds any missing column to an existing database on
+startup, so upgrading from a Milestone 2 database doesn't require
+deleting it and losing inspection history.
+
 ## End-to-end test checklist (do this in order)
 
 0. **Profile page (personalized per-account stats):** each account's
@@ -86,9 +145,16 @@ Defect Inspection page will show "⚠ no reference set" for it.
    "Run defect analysis". You should see a similarity score, a pass/fail
    verdict, and (if the images differ) red bounding boxes around the
    differing regions.
-6. **Object Detection** → upload any common object photo (bottle, cup,
+6. After the analysis, confirm the result panel shows the **quality
+   decision** (Pass / Rework / Reject), an **overall severity score with
+   its level**, the severity breakdown, and a table of each classified
+   defect with its Size / Location / Type / Confidence sub-scores.
+7. **Analytics** (sidebar → Insights) → confirm the trend chart, severity
+   donut, defect-type bars and per-product-line table are populated from
+   the inspections you just ran.
+8. **Object Detection** → upload any common object photo (bottle, cup,
    laptop, person) and confirm labeled bounding boxes appear.
-7. Toggle light/dark theme from the sidebar and confirm it persists on
+9. Toggle light/dark theme from the top bar and confirm it persists on
    refresh.
 
 ## Project structure

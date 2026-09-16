@@ -85,6 +85,19 @@ export interface DefectRegion {
   width: number;
   height: number;
   area_ratio: number;
+
+  // Milestone 3 — classification + severity. Optional because
+  // predictions stored before Milestone 3 won't carry them.
+  defect_type?: string | null;
+  defect_label?: string | null;
+  confidence?: number | null;
+  size_score?: number | null;
+  location_score?: number | null;
+  type_score?: number | null;
+  confidence_score?: number | null;
+  severity_score?: number | null;
+  severity_level?: string | null;
+  recommended_action?: string | null;
 }
 
 export interface QualityReport {
@@ -110,6 +123,16 @@ export interface DefectPrediction {
   quality: QualityReport | null;
   quality_flags: string[];
   created_at: string;
+
+  // Milestone 3 — quality decision
+  overall_severity: number;
+  severity_level: string;
+  decision: "pass" | "rework" | "reject";
+  recommendation: string | null;
+  critical_count: number;
+  high_count: number;
+  medium_count: number;
+  low_count: number;
 }
 
 // ---------- Personal account stats (Profile page) ----------
@@ -151,3 +174,64 @@ export interface DailyActivity {
   passed: number;
   failed: number;
 }
+
+// ---------- Milestone 3: Classification, Severity & Analytics ----------
+
+export type SeverityLevel = "Critical" | "High" | "Medium" | "Low" | "None";
+export type QualityDecision = "pass" | "rework" | "reject";
+
+export interface DefectTypeCount {
+  defect_type: string;
+  label: string;
+  count: number;
+  avg_severity: number;
+}
+
+export interface SeverityDistribution {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+}
+
+export interface ProductLineQuality {
+  product_line: string;
+  inspections: number;
+  passed: number;
+  rework: number;
+  rejected: number;
+  pass_rate_pct: number | null;
+  avg_severity: number;
+}
+
+export interface DefectTrendPoint {
+  date: string;
+  inspections: number;
+  defects: number;
+  avg_severity: number;
+}
+
+export interface AnalyticsOverview {
+  total_inspections: number;
+  total_defects: number;
+  avg_severity: number;
+  reject_rate_pct: number | null;
+  severity_distribution: SeverityDistribution;
+  defect_types: DefectTypeCount[];
+  by_product_line: ProductLineQuality[];
+  trend: DefectTrendPoint[];
+}
+
+export const SEVERITY_COLORS: Record<string, string> = {
+  Critical: "#DC2626",
+  High: "#EA8A0C",
+  Medium: "#2563EB",
+  Low: "#16A35E",
+  None: "#94A3B8",
+};
+
+export const DECISION_STYLES: Record<QualityDecision, { label: string; className: string }> = {
+  pass: { label: "Pass", className: "bg-success/10 text-success border-success/30" },
+  rework: { label: "Rework Required", className: "bg-warning/10 text-warning border-warning/30" },
+  reject: { label: "Reject", className: "bg-critical/10 text-critical border-critical/30" },
+};

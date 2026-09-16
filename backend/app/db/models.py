@@ -117,8 +117,20 @@ class DefectPrediction(Base):
     similarity_score: Mapped[float] = mapped_column(Float, nullable=False)
     defect_count: Mapped[int] = mapped_column(Integer, default=0)
     total_affected_area_pct: Mapped[float] = mapped_column(Float, default=0.0)
-    regions: Mapped[list] = mapped_column(JSON, default=list)  # [{x,y,width,height,area_ratio}, ...]
+    # Milestone 2 stored bare geometry here; Milestone 3 enriches each
+    # region with its classified type, per-parameter scores and severity.
+    regions: Mapped[list] = mapped_column(JSON, default=list)
     verdict: Mapped[InspectionVerdict] = mapped_column(Enum(InspectionVerdict), default=InspectionVerdict.PASS)
+
+    # --- Milestone 3: classification, severity scoring, quality decision ---
+    overall_severity: Mapped[float] = mapped_column(Float, default=0.0)
+    severity_level: Mapped[str] = mapped_column(String(20), default="None")  # Critical|High|Medium|Low|None
+    decision: Mapped[str] = mapped_column(String(20), default="pass")        # pass|rework|reject
+    recommendation: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    critical_count: Mapped[int] = mapped_column(Integer, default=0)
+    high_count: Mapped[int] = mapped_column(Integer, default=0)
+    medium_count: Mapped[int] = mapped_column(Integer, default=0)
+    low_count: Mapped[int] = mapped_column(Integer, default=0)
 
     quality_brightness: Mapped[float | None] = mapped_column(Float, nullable=True)
     quality_contrast: Mapped[float | None] = mapped_column(Float, nullable=True)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import PageShell from "../components/PageShell";
 import { useAuth } from "../context/AuthContext";
 import { api, User, UserRole, canEditRoles } from "../lib/api";
 
@@ -57,9 +57,7 @@ export default function UserManagement() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 px-8 py-7 max-w-[1100px]">
+    <PageShell section="User Management" maxWidth="max-w-[1100px]">
         <p className="label-eyebrow mb-1">User Management Module</p>
         <h1 className="font-display text-2xl font-semibold mb-1">Team Accounts</h1>
         <p className="text-sm text-fg-subtle mb-8">
@@ -161,7 +159,6 @@ export default function UserManagement() {
             </table>
           </div>
         )}
-      </main>
-    </div>
+    </PageShell>
   );
 }

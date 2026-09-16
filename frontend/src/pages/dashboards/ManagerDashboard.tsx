@@ -74,9 +74,14 @@ export default function ManagerDashboard() {
               Reassign any account's role — Quality Engineer, Factory Supervisor, Production Manager, or Admin.
             </p>
           </div>
-          <Link to="/users" className="btn-primary !text-xs !px-3 !py-1.5 self-start mt-4">
-            Manage user roles →
-          </Link>
+          <div className="flex gap-2 mt-4">
+            <Link to="/users" className="btn-primary !text-xs !px-3 !py-1.5">
+              Manage roles →
+            </Link>
+            <Link to="/analytics" className="btn-secondary !text-xs !px-3 !py-1.5">
+              Analytics →
+            </Link>
+          </div>
         </div>
       </div>
     </>

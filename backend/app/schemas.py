@@ -110,6 +110,19 @@ class DefectRegionOut(BaseModel):
     height: int
     area_ratio: float
 
+    # Milestone 3 — classification + severity. Optional so predictions
+    # stored before Milestone 3 still deserialize cleanly.
+    defect_type: str | None = None
+    defect_label: str | None = None
+    confidence: float | None = None
+    size_score: float | None = None
+    location_score: float | None = None
+    type_score: float | None = None
+    confidence_score: float | None = None
+    severity_score: float | None = None
+    severity_level: str | None = None
+    recommended_action: str | None = None
+
 
 class QualityReportOut(BaseModel):
     brightness: float
@@ -147,9 +160,62 @@ class DefectPredictionOut(BaseModel):
     total_affected_area_pct: float
     regions: list[DefectRegionOut]
     verdict: InspectionVerdict
+
+    overall_severity: float = 0.0
+    severity_level: str = "None"
+    decision: str = "pass"
+    recommendation: str | None = None
+    critical_count: int = 0
+    high_count: int = 0
+    medium_count: int = 0
+    low_count: int = 0
     quality: QualityReportOut | None
     quality_flags: list[str]
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+
+# ---------- Milestone 3: Manufacturing Analytics ----------
+
+class DefectTypeCountOut(BaseModel):
+    defect_type: str
+    label: str
+    count: int
+    avg_severity: float
+
+
+class SeverityDistributionOut(BaseModel):
+    critical: int
+    high: int
+    medium: int
+    low: int
+
+
+class ProductLineQualityOut(BaseModel):
+    product_line: str
+    inspections: int
+    passed: int
+    rework: int
+    rejected: int
+    pass_rate_pct: float | None
+    avg_severity: float
+
+
+class DefectTrendPointOut(BaseModel):
+    date: str
+    inspections: int
+    defects: int
+    avg_severity: float
+
+
+class AnalyticsOverviewOut(BaseModel):
+    total_inspections: int
+    total_defects: int
+    avg_severity: float
+    reject_rate_pct: float | None
+    severity_distribution: SeverityDistributionOut
+    defect_types: list[DefectTypeCountOut]
+    by_product_line: list[ProductLineQualityOut]
+    trend: list[DefectTrendPointOut]

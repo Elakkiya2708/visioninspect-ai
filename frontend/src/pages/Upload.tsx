@@ -1,5 +1,5 @@
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import PageShell from "../components/PageShell";
 import { api, ProductImage } from "../lib/api";
 
 interface QueuedFile {
@@ -108,9 +108,7 @@ export default function Upload() {
   const pendingCount = queue.filter((q) => q.status === "pending").length;
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 px-8 py-7 max-w-[1000px]">
+    <PageShell section="Image Acquisition" maxWidth="max-w-[1000px]">
         <p className="label-eyebrow mb-1">Image Acquisition Module</p>
         <h1 className="font-display text-2xl font-semibold mb-1">Upload Product Images</h1>
         <p className="text-sm text-fg-subtle mb-8">
@@ -209,8 +207,7 @@ export default function Upload() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </PageShell>
   );
 }
 

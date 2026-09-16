@@ -13,7 +13,10 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 function getInitialTheme(): Theme {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  // Dark is the default for a factory-floor console (and matches the
+  // rest of the operator tooling); the toggle still switches to light
+  // and that choice is remembered.
+  return "dark";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

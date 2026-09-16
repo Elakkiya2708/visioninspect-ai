@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import PageShell from "../components/PageShell";
 import IconStat from "../components/IconStat";
 import { useAuth } from "../context/AuthContext";
 import { api, UserStats } from "../lib/api";
@@ -35,9 +35,7 @@ export default function Profile() {
   const joined = user ? new Date(user.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "";
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 px-8 py-7 max-w-[1100px]">
+    <PageShell section="Profile" maxWidth="max-w-[1100px]">
         <p className="label-eyebrow mb-1">Account</p>
         <h1 className="font-display text-2xl font-semibold mb-6">My Profile</h1>
 
@@ -104,7 +102,6 @@ export default function Profile() {
             />
           </div>
         )}
-      </main>
-    </div>
+    </PageShell>
   );
 }

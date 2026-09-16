@@ -1,4 +1,4 @@
-import Sidebar from "../components/Sidebar";
+import PageShell from "../components/PageShell";
 import { useAuth } from "../context/AuthContext";
 import QualityEngineerDashboard from "./dashboards/QualityEngineerDashboard";
 import SupervisorDashboard from "./dashboards/SupervisorDashboard";
@@ -26,10 +26,5 @@ export default function Dashboard() {
     }
   }
 
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 px-8 py-7 max-w-[1400px]">{renderRoleDashboard()}</main>
-    </div>
-  );
+  return <PageShell section="Dashboard">{renderRoleDashboard()}</PageShell>;
 }

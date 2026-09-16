@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import PageShell from "../components/PageShell";
 import type { CocoSsdModel, DetectedObject } from "../lib/cocoSsd";
 
 type ModelState = "loading-scripts" | "loading-model" | "ready" | "error";
@@ -130,9 +130,7 @@ export default function Detect() {
   }, {});
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 px-8 py-7 max-w-[1100px]">
+    <PageShell section="Object Detection" maxWidth="max-w-[1100px]">
         <p className="label-eyebrow mb-1">Detection Preview</p>
         <h1 className="font-display text-2xl font-semibold mb-8">Multi-Object Detection</h1>
 
@@ -211,7 +209,6 @@ export default function Detect() {
             )}
           </div>
         </div>
-      </main>
-    </div>
+    </PageShell>
   );
 }
