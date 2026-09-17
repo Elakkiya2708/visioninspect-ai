@@ -57,10 +57,10 @@ export default function FactoryOverview() {
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        <StatCard label="Total Images" value={imageStats?.total_images ?? "—"} accent="neutral" />
+        <StatCard label="Total Images" value={imageStats?.total_images ?? "—"} accent="teal" />
         <StatCard label="Validated" value={imageStats?.validated ?? "—"} accent="success" />
         <StatCard label="Rejected" value={imageStats?.rejected ?? "—"} accent="critical" />
-        <StatCard label="Inspections Run" value={inspectionStats?.total_inspections ?? "—"} accent="info" />
+        <StatCard label="Inspections Run" value={inspectionStats?.total_inspections ?? "—"} accent="purple" />
         <StatCard
           label="Team Pass Rate"
           value={inspectionStats?.pass_rate_pct != null ? `${inspectionStats.pass_rate_pct}%` : "—"}
@@ -69,7 +69,7 @@ export default function FactoryOverview() {
         <StatCard
           label="Avg. Similarity"
           value={inspectionStats?.avg_similarity_pct != null ? `${inspectionStats.avg_similarity_pct}%` : "—"}
-          accent="neutral"
+          accent="pink"
         />
       </div>
 

@@ -52,13 +52,13 @@ export default function QualityEngineerDashboard() {
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <IconStat label="Images Uploaded" value={stats?.total_images ?? 0} tone="accent" icon="image" />
+            <IconStat label="Images Uploaded" value={stats?.total_images ?? 0} tone="teal" icon="image" />
             <IconStat label="Validated" value={stats?.validated_images ?? 0} tone="success" icon="check" />
-            <IconStat label="Inspections Run" value={stats?.total_inspections ?? 0} tone="info" icon="chart" />
+            <IconStat label="Inspections Run" value={stats?.total_inspections ?? 0} tone="purple" icon="chart" />
             <IconStat
               label="Your Pass Rate"
               value={stats?.pass_rate_pct != null ? `${stats.pass_rate_pct}%` : "—"}
-              tone="accent"
+              tone="pink"
               icon="trend"
             />
           </div>

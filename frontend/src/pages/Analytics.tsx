@@ -56,9 +56,9 @@ export default function Analytics() {
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <StatCard label="Inspections" value={data?.total_inspections ?? 0} accent="info" />
+            <StatCard label="Inspections" value={data?.total_inspections ?? 0} accent="teal" />
             <StatCard label="Defects Found" value={data?.total_defects ?? 0} accent="warning" />
-            <StatCard label="Avg. Severity" value={data?.avg_severity ?? 0} accent="accent" />
+            <StatCard label="Avg. Severity" value={data?.avg_severity ?? 0} accent="purple" />
             <StatCard
               label="Reject Rate"
               value={data?.reject_rate_pct != null ? `${data.reject_rate_pct}%` : "—"}

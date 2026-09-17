@@ -23,6 +23,28 @@ const INSIGHTS_ITEMS: NavItem[] = [{ to: "/analytics", label: "Analytics", icon:
 const ACCOUNT_ITEMS: NavItem[] = [{ to: "/profile", label: "Profile", icon: "user" }];
 const USER_MANAGEMENT_ITEM: NavItem = { to: "/users", label: "User Management", icon: "users" };
 
+// Each section gets its own hue when active, instead of every icon
+// turning the same accent blue — literal class strings (not built from
+// a template) so Tailwind's scanner detects and generates them.
+const ICON_TONE: Record<string, string> = {
+  grid: "text-sky-400",
+  upload: "text-teal-400",
+  shield: "text-amber-400",
+  scan: "text-purple-400",
+  analytics: "text-pink-400",
+  user: "text-emerald-400",
+  users: "text-indigo-400",
+};
+const RAIL_TONE: Record<string, string> = {
+  grid: "bg-sky-400",
+  upload: "bg-teal-400",
+  shield: "bg-amber-400",
+  scan: "bg-purple-400",
+  analytics: "bg-pink-400",
+  user: "bg-emerald-400",
+  users: "bg-indigo-400",
+};
+
 function Icon({ name }: { name: string }) {
   const common = { stroke: "currentColor", strokeWidth: 1.3, fill: "none" } as const;
   switch (name) {
@@ -107,9 +129,13 @@ function NavSection({ label, items }: { label: string; items: NavItem[] }) {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r bg-accent" />
+                  <span
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r ${
+                      RAIL_TONE[item.icon] || "bg-accent"
+                    }`}
+                  />
                 )}
-                <span className={isActive ? "text-accent" : ""}>
+                <span className={isActive ? ICON_TONE[item.icon] || "text-accent" : "opacity-70"}>
                   <Icon name={item.icon} />
                 </span>
                 {item.label}

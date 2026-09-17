@@ -1,7 +1,7 @@
 interface IconStatProps {
   label: string;
   value: string | number;
-  tone: "accent" | "success" | "critical" | "warning" | "info";
+  tone: "accent" | "success" | "critical" | "warning" | "info" | "purple" | "pink" | "teal";
   icon: "check" | "cross" | "chart" | "image" | "trend";
 }
 
@@ -11,6 +11,9 @@ const TONE_CLASSES: Record<string, string> = {
   critical: "bg-critical/12 text-critical",
   warning: "bg-warning/12 text-warning",
   info: "bg-info/12 text-info",
+  purple: "bg-purple-500/12 text-purple-500 dark:text-purple-400",
+  pink: "bg-pink-500/12 text-pink-500 dark:text-pink-400",
+  teal: "bg-teal-500/12 text-teal-500 dark:text-teal-400",
 };
 
 function IconGlyph({ name }: { name: IconStatProps["icon"] }) {
