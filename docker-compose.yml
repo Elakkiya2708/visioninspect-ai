@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: visioninspect
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-visioninspect}
+      POSTGRES_DB: visioninspect
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U visioninspect"]
+      interval: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://visioninspect:${POSTGRES_PASSWORD:-visioninspect}@db:5432/visioninspect
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production-please}
+      CORS_ORIGINS: http://localhost:8080
+      DATA_DIR: /data
+    volumes: [appdata:/data]
+    depends_on:
+      db: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/health').status == 200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on:
+      backend: { condition: service_healthy }
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  appdata:

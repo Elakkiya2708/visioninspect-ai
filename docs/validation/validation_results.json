@@ -1,0 +1,217 @@
+{
+  "config": {
+    "out": "/home/claude/visioninspect-ai/docs/validation",
+    "train": 60,
+    "per_defect": 12,
+    "good": 30,
+    "seed": 2026
+  },
+  "categories": {
+    "demo_metal_plate": {
+      "evaluated": true,
+      "n_test": 90,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "auroc": 1.0,
+      "average_precision": 1.0,
+      "false_alarm_rate": 0.0,
+      "mean_pixel_iou": 0.2181,
+      "confusion": {
+        "tp": 60,
+        "fp": 0,
+        "tn": 30,
+        "fn": 0
+      },
+      "per_type_accuracy": {
+        "crack": 1.0,
+        "dent": 1.0,
+        "good": 1.0,
+        "hole": 1.0,
+        "scratch": 1.0,
+        "stain": 1.0
+      },
+      "train_seconds": 9.2,
+      "n_train": 48,
+      "n_holdout": 12,
+      "threshold": 2.4267
+    },
+    "demo_fabric": {
+      "evaluated": true,
+      "n_test": 90,
+      "accuracy": 0.8222,
+      "precision": 1.0,
+      "recall": 0.7333,
+      "f1": 0.8462,
+      "auroc": 0.9994,
+      "average_precision": 0.9997,
+      "false_alarm_rate": 0.0,
+      "mean_pixel_iou": 0.2345,
+      "confusion": {
+        "tp": 44,
+        "fp": 0,
+        "tn": 30,
+        "fn": 16
+      },
+      "per_type_accuracy": {
+        "crack": 1.0,
+        "dent": 0.0,
+        "good": 1.0,
+        "hole": 1.0,
+        "scratch": 0.667,
+        "stain": 1.0
+      },
+      "train_seconds": 7.0,
+      "n_train": 48,
+      "n_holdout": 12,
+      "threshold": 7.606
+    },
+    "demo_ceramic_tile": {
+      "evaluated": true,
+      "n_test": 90,
+      "accuracy": 0.9889,
+      "precision": 0.9836,
+      "recall": 1.0,
+      "f1": 0.9917,
+      "auroc": 1.0,
+      "average_precision": 1.0,
+      "false_alarm_rate": 0.0333,
+      "mean_pixel_iou": 0.2221,
+      "confusion": {
+        "tp": 60,
+        "fp": 1,
+        "tn": 29,
+        "fn": 0
+      },
+      "per_type_accuracy": {
+        "crack": 1.0,
+        "dent": 1.0,
+        "good": 0.967,
+        "hole": 1.0,
+        "scratch": 1.0,
+        "stain": 1.0
+      },
+      "train_seconds": 7.2,
+      "n_train": 48,
+      "n_holdout": 12,
+      "threshold": 2.5002
+    }
+  },
+  "classification": {
+    "samples": 180,
+    "detection_rate": 0.9056,
+    "type_accuracy_all": 0.8,
+    "type_accuracy_of_detected": 0.8834,
+    "per_type_recall": {
+      "Scratch": 0.833,
+      "Crack": 0.972,
+      "Stain / Contamination": 0.75,
+      "Hole / Missing Material": 1.0,
+      "Dent / Deformation": 0.444
+    },
+    "confusion": {
+      "Scratch": {
+        "Scratch": 30,
+        "Crack": 0,
+        "Stain / Contamination": 0,
+        "Hole / Missing Material": 0,
+        "Dent / Deformation": 0,
+        "Discoloration": 0,
+        "Surface Anomaly": 1,
+        "MISSED": 5
+      },
+      "Crack": {
+        "Scratch": 1,
+        "Crack": 35,
+        "Stain / Contamination": 0,
+        "Hole / Missing Material": 0,
+        "Dent / Deformation": 0,
+        "Discoloration": 0,
+        "Surface Anomaly": 0,
+        "MISSED": 0
+      },
+      "Stain / Contamination": {
+        "Scratch": 5,
+        "Crack": 0,
+        "Stain / Contamination": 27,
+        "Hole / Missing Material": 0,
+        "Dent / Deformation": 0,
+        "Discoloration": 0,
+        "Surface Anomaly": 4,
+        "MISSED": 0
+      },
+      "Hole / Missing Material": {
+        "Scratch": 0,
+        "Crack": 0,
+        "Stain / Contamination": 0,
+        "Hole / Missing Material": 36,
+        "Dent / Deformation": 0,
+        "Discoloration": 0,
+        "Surface Anomaly": 0,
+        "MISSED": 0
+      },
+      "Dent / Deformation": {
+        "Scratch": 5,
+        "Crack": 0,
+        "Stain / Contamination": 0,
+        "Hole / Missing Material": 0,
+        "Dent / Deformation": 16,
+        "Discoloration": 0,
+        "Surface Anomaly": 3,
+        "MISSED": 12
+      }
+    },
+    "good_parts": 90,
+    "good_parts_flagged": 0,
+    "false_defect_rate": 0.0,
+    "mean_severity_by_defect": {
+      "Scratch": 47.7,
+      "Crack": 75.4,
+      "Stain / Contamination": 68.7,
+      "Hole / Missing Material": 72.7,
+      "Dent / Deformation": 43.5
+    },
+    "decisions": {
+      "good": {
+        "PASS": 90
+      },
+      "scratch": {
+        "REVIEW": 23,
+        "REWORK": 8,
+        "PASS": 5
+      },
+      "crack": {
+        "REWORK": 31,
+        "REJECT": 4,
+        "REVIEW": 1
+      },
+      "stain": {
+        "REWORK": 26,
+        "REVIEW": 7,
+        "REJECT": 3
+      },
+      "hole": {
+        "REWORK": 36
+      },
+      "dent": {
+        "REVIEW": 6,
+        "REWORK": 18,
+        "PASS": 12
+      }
+    }
+  },
+  "performance": {
+    "latency_ms": {
+      "mean": 136,
+      "p50": 132,
+      "p95": 166,
+      "max": 204,
+      "n": 270
+    },
+    "throughput_1_workers_img_per_s": 6.99,
+    "throughput_2_workers_img_per_s": 7.27,
+    "throughput_4_workers_img_per_s": 7.31,
+    "cold_single_baseline_ms": 144
+  }
+}
