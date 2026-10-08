@@ -1,4 +1,4 @@
-const BASE = '/api'
+const BASE = 'https://visioninspect-ai-backend-smf0.onrender.com'
 export const tokenStore = {
   get: () => localStorage.getItem('vi_token'),
   set: (t) => localStorage.setItem('vi_token', t),
