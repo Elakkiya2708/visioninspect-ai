@@ -12,3 +12,4 @@ pillow>=10.0
 pytest>=8.0
 httpx>=0.27
 gdown
+psycopg[binary]
