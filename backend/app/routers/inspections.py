@@ -4,7 +4,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import cv2
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
@@ -84,7 +84,7 @@ def _apply_filters(q, search, decision, severity, category, source, date_from, d
 
 
 @router.post("", status_code=201)
-def create_inspections(files: list[UploadFile] = File(...), category: str = Form("general"),
+def create_inspections(files: List[UploadFile] = File(...), category: str = Form("general"),
                        db: Session = Depends(get_db), user: User = Depends(current_user)):
     if not files:
         raise HTTPException(400, "No files supplied")
