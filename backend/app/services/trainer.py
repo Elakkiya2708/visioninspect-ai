@@ -39,9 +39,12 @@ def _load_proc(path):
     return preprocess(img, MODEL_SIZE)[0]
 
 
+
 def train_category(category, root, out_path, version, max_train=200, k=4, progress=None):
     cat = Path(root) / category
+    max_train = min(max_train, 40)
     train_paths = _imgs(cat / "train" / "good")[:max_train]
+
     if len(train_paths) < 8:
         raise ValueError(f"Need at least 8 good training images in {cat / 'train' / 'good'} (found {len(train_paths)}).")
     t0 = time.perf_counter()
